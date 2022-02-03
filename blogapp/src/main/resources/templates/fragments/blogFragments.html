@@ -1,0 +1,23 @@
+<div th:fragment="blog(title, description, dateCreated)" 
+     class="card" style="width: fit-content;" th:each="blog : ${blogs}">
+    <div th:if="${blog.dateCreated != blog.expirationDate}" class="card-header" th:utext="'Blog post available until ' + '<strong>' + ${blog.expirationDate} + '</strong>' ">
+        Featured
+    </div>
+    <div class="card-body">
+        <h3 class="card-title" th:text="${blog.title}"></h3>
+        <h6 class="card-subtitle mb-2 text-muted" 
+            th:text="${#temporals.dayOfWeekName(blog.dateCreated)} + ', ' +
+            ${#temporals.monthNameShort(blog.dateCreated)} + ' ' +
+            ${#temporals.day(blog.dateCreated)} + ', ' +
+            ${#temporals.year(blog.dateCreated)}"></h6>
+        <!-- Tags -->
+        <div style="display: flex; margin: 20px 0;">
+            <span th:each="tag : ${tags}" style="margin-right: 9px">
+                <span th:replace="fragments/tagFragment :: 
+                      tag(${tag.tagName},${tag.tagColor})"></span>                                      
+            </span>
+        </div>
+        <!--...-->
+        <p class="card-text" th:utext="${blog.description}"></p>                        
+    </div>
+</div>

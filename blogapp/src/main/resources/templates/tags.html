@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <!--Required meta tags--> 
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!--Bootstrap CSS--> 
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+        <title>Personal Blog</title>
+    </head>
+    <body>
+        <!--Main Body of Page--> 
+        <div class="container">
+            
+            <!--Nav Bar-->
+            <div class="row m-4">
+                <div class="col text-center border border-dark" style="padding-top: 1.5%"> 
+                    <a th:href="@{/home}" class="card-link"><h5>Home</h5></a>
+                </div>
+                <div class="col-9 text-center border border-dark">
+                    <h1>Tags</h1>
+                </div>
+                <div class="col text-center align-middle border border-dark" style="padding-top: 1.5%"> 
+                    <a sec:authorize="isAuthenticated()" th:href="@{/logout}" class="card-link"><h5>Logout</h5></a> 
+                    <a sec:authorize="isAnonymous()" th:href="@{/login}" class="card-link"><h5>Login</h5></a>
+                </div>
+            </div>
+            <!--...-->
+            
+            <div class="row m-4 border border-dark">
+                <div class="col-12 m-1 text-center" 
+                     th:if="${!errors.isEmpty()}">
+                    <p class="alert alert-danger" th:each="error : ${errors}" 
+                       th:text="${error.message}">Error message</p>
+                </div>
+                <div class="col-3 text-center m-3">
+                    <span class="h3">Add Tag</span>
+                </div>
+                <div class="col-7 text-center m-3">
+                    <form action="addTags" method="POST">
+                        <div class="form-group row">
+                            <div class="col-9">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="tagName">Tag Name</span>
+                                    <input type="text" name="tagName" id="tagName" class="form-control" 
+                                           placeholder='e.g. "MyFavouriteRadioMemories"' aria-label="tagName">
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-9">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="tagName">Tag Color </span>
+                                    <input  type="text" name="tagColor" id="tagColor" class="form-control" 
+                                           placeholder='e.g. "#FF00FF"' aria-label="tagName">
+                                </div>
+                            </div>
+                        </div>       
+                        <div class="form-group row">
+                            <div class="col-9">
+                        <button type="submit" class="btn btn-primary">Add Tag</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+                <div class="row m-4">
+                    <div class="col text-center m-3">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tag name</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="tag : ${tags}" 
+                                    th:style="'background-color:'
+                                    + ${tag.tagColor.length() == 6 ? '#' : ''} 
+                                    + ${tag.tagColor} + ';'">
+                                    <td th:text="${tag.tagId}">Tag ID</td>
+                                    <td th:text="'#' + ${tag.tagName}">Tag Name</td>
+                                    <td><a href="#" th:href="@{/editTag(tagId=${tag.tagId})}">Edit</a></td>
+                                    <td><a href="#" th:href="@{/deleteTag(tagId=${tag.tagId})}">Delete</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End main body--> 
+
+        <!--Optional JavaScript--> 
+        <!--jQuery first, then Popper.js, then Bootstrap JS--> 
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    </body>
+</html>; 
+

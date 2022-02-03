@@ -1,0 +1,11 @@
+<div th:fragment="navBar(title,status,link)" class="row m-4">
+    <div class="col text-center border border-dark" style="padding-top: 1.5%"> 
+        <a th:href="@{/home}"><h5>Home</h5></a>
+    </div>
+    <div class="col-9 text-center border border-dark">
+        <h1 th:text="${title}">Admin Dashboard</h1>
+    </div>
+    <div class="col text-center align-middle border border-dark" style="padding-top: 1.5%"> 
+        <a th:href="#"><h5 th:text="${status}">Login</h5></a>
+    </div>
+</div>

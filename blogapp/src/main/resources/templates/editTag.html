@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <!--Required meta tags--> 
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!--Bootstrap CSS--> 
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+        <title>Blog</title>
+    </head>
+    <body>
+        <!--Main Body of Page--> 
+        <div class="container">
+            
+            <!--Nav Bar-->
+            <div class="row m-4">
+                <div class="col text-center border border-dark" style="padding-top: 1.5%"> 
+                    <a th:href="@{/home}" class="card-link"><h5>Home</h5></a>
+                </div>
+                <div class="col-9 text-center border border-dark">
+                    <h1>Tag editor</h1>
+                </div>
+                <div class="col text-center align-middle border border-dark" style="padding-top: 1.5%"> 
+                    <a sec:authorize="isAuthenticated()" th:href="@{/logout}" class="card-link"><h5>Logout</h5></a> 
+                    <a sec:authorize="isAnonymous()" th:href="@{/login}" class="card-link"><h5>Login</h5></a>
+                </div>
+            </div>
+            <!--...-->
+            
+            <div class="row m-4 border border-dark">
+                <div class="col-3 text-center m-3">
+                    <span class="h3" th:text="'Edit Tag #' + ${tag.tagId}">Tag Id</span>
+                </div>                
+                <div class="col-7 text-center m-3">
+                    <form action="editTag" method="POST">
+                        <!--The #fields.hasErrors call looks at the BindingResult 
+                        to check if the passed field has any errors.-->
+                        <div class="form-group row">
+                            <label for="tagName" class="col-3 col-form-label">
+                                Tag Name</label>
+                            <div class="col-9">
+                                <input type="text" name="tagName" id="tagName" class="form-control" 
+                                       th:value="${tag.tagName}" />
+                                <div th:if="${#fields.hasErrors('tag.tagName')}">
+                                    <p th:each="error : ${#fields.errors('tag.tagName')}" class="alert alert-danger"
+                                       th:text="${error}"> Bad tag name </p>
+                                </div>
+                            </div>
+                        </div>
+                        <!--...-->
+                        <div class="form-group row">
+                            <label for="tagColor" class="col-3 col-form-label">
+                                Hex Color</label>
+                            <div class="col-9">
+                                <input type="text" name="tagColor" id="tagColor" class="form-control" 
+                                       th:value="${tag.tagColor}" />
+                                <div th:if="${#fields.hasErrors('tag.tagColor')}">
+                                    <p th:each="error : ${#fields.errors('tag.tagColor')}" class="alert alert-danger" 
+                                       th:text="${error}"> Bad tag color</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="tagColor" class="col-3 col-form-label">
+                                Preview Tag</label>
+                            <div class="col-9">
+                                <span th:replace="fragments/tagFragment :: tag(${tag.tagName},${tag.tagColor})"></span>
+                            </div>  
+                        </div>
+                        <!--...-->
+                        <input type="hidden" name="tagId" th:value="${tag.tagId}"/>
+                        <button type="submit" class="btn btn-primary">Update Tag</button>
+                    </form>
+                </div>
+            </div>
+        </div> 
+        <!--End main body--> 
+
+        <!--Optional JavaScript--> 
+        <!--jQuery first, then Popper.js, then Bootstrap JS--> 
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    </body>
+</html>; 
+

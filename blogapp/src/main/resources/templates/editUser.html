@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <!--Required meta tags--> 
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!--Bootstrap CSS--> 
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+        <title>Personal Blog</title>
+    </head>
+    <body>
+        <!--Main Body of Page--> 
+        <div class="container">
+            
+            <!--Nav Bar-->
+            <div class="row m-4">
+                <div class="col text-center border border-dark" style="padding-top: 1.5%"> 
+                    <a th:href="@{/home}" class="card-link"><h5>Home</h5></a>
+                </div>
+                <div class="col-9 text-center border border-dark">
+                    <h1>User editor</h1>
+                </div>
+                <div class="col text-center align-middle border border-dark" style="padding-top: 1.5%"> 
+                    <a sec:authorize="isAuthenticated()" th:href="@{/logout}" class="card-link"><h5>Logout</h5></a> 
+                    <a sec:authorize="isAnonymous()" th:href="@{/login}" class="card-link"><h5>Login</h5></a>
+                </div>
+            </div>
+            <!--...-->
+            
+            <div class="row m-4 border border-dark">
+                <div class="col-3 text-center m-3">
+                    <!--<span class="h3">Edit User</span>-->     
+                    <span class="h3" th:text="'Edit User #' + ${user.userId}">User Id</span>                
+                </div>
+                <div class="col-7 text-center m-3">
+                    <form action="editUser" method="POST">
+                        <div class="form-group row">
+                            <div class="col-9">
+                                <div class="input-group mb-3">
+
+                                    <span class="input-group-text" id="firstName">First Name</span>
+                                    <input type="text" name="firstName" id="firstName" class="form-control" 
+                                           th:value="${user.firstName}" aria-label="firstName">
+
+                                </div>
+                                <!--The #fields.hasErrors call looks at the BindingResult 
+                        to check if the passed field has any errors.-->
+                                <div th:if="${#fields.hasErrors('user.firstName')}">
+                                    <p th:each="error : ${#fields.errors('user.firstName')}" class="alert alert-danger"
+                                       th:text="${error}"> Bad first name </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-9">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="lastName">Last Name </span>
+                                    <input  type="text" name="lastName" id="lastName" class="form-control" 
+                                            th:value="${user.lastName}" aria-label="lastName">
+                                </div>
+                                <div th:if="${#fields.hasErrors('user.lastName')}">
+                                    <p th:each="error : ${#fields.errors('user.lastName')}" class="alert alert-danger"
+                                       th:text="${error}"> Bad last name </p>
+                                </div>
+                            </div>
+                        </div>                               
+                        <div class="form-group row">
+                            <!--<label for="image" class="col-3 col-form-label">Profile picture</label>-->
+                            <div class="col-9">
+                                <span class="input-group-text" id="image">Profile picture</span>
+                                <select id="image" name="imageId" class="form-control">
+                                    <option th:each="image : ${images}"
+                                            th:value="${image.imageId}"
+                                            th:text="${image.imageFileName}">Image</option>
+                                </select>
+                            </div>                           
+                        </div> 
+                        <div class="form-group row">
+                            <div class="form-check" th:style=" 'margin-left:18px;' ">
+                                <input class="form-check-input" th:checked="${user.isAdmin}"
+                                       type="checkbox" id="isAdmin" name='isAdmin'>
+                                <label class="form-check-label" for="isAdmin">
+                                    Admin privileges
+                                </label>
+                            </div>
+                        </div> 
+                        <div class="form-group row">
+                            <div class="col-9">
+                                <input type="hidden" name="userId" th:value="${user.userId}"/>
+                                <button type="submit" class="btn btn-primary">Update User</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End main body--> 
+
+    <!--Optional JavaScript--> 
+    <!--jQuery first, then Popper.js, then Bootstrap JS--> 
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</body>
+</html>; 
+

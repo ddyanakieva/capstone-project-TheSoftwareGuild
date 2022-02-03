@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <!--Required meta tags--> 
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!--Bootstrap CSS--> 
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+        <title>Personal Blog</title>
+    </head>
+    <body>
+        <!--Main Body of Page--> 
+        <div class="container">
+            
+             <!--Nav Bar-->
+            <div class="row m-4">
+                <div class="col text-center border border-dark" style="padding-top: 1.5%"> 
+                    <a th:href="@{/home}" class="card-link"><h5>Home</h5></a>
+                </div>
+                <div class="col-9 text-center border border-dark">
+                    <h1>All blogs</h1>
+                </div>
+                <div class="col text-center align-middle border border-dark" style="padding-top: 1.5%"> 
+                    <a sec:authorize="isAuthenticated()" th:href="@{/logout}" class="card-link"><h5>Logout</h5></a> 
+                    <a sec:authorize="isAnonymous()" th:href="@{/login}" class="card-link"><h5>Login</h5></a>
+                </div>
+            </div>
+            <!--...-->
+            
+            <div class="row m-4" th:each="blog : ${blogs}" 
+                 th:if="${blog.isApproved} ? true 
+                 : ${#authorization.expression('hasRole(''USER'')')}">
+                <div class="card" style="width: 100%">
+                    <!--Approved Status-->
+                    <div sec:authorize="isAuthenticated()" th:if="${!blog.isApproved}" class="card-header text-white" 
+                        style="background-color: #d97366;">
+                        <strong>Blog post awaiting approval by Admin.</strong>
+                    </div>
+                    <!--Expiration Date-->
+                    <div th:if="${blog.dateCreated != blog.expirationDate}" class="card-header" 
+                         th:utext="'Blog post available until ' + '<strong>' + ${#temporals.dayOfWeekName(blog.dateCreated)} + ', ' +
+                            ${#temporals.monthNameShort(blog.dateCreated)} + ' ' +
+                            ${#temporals.day(blog.dateCreated)} + ', ' +
+                            ${#temporals.year(blog.dateCreated)} + '</strong>' ">
+                        Featured
+                    </div>
+                    <!--Cover Photo-->
+                    <!--<img th:src="@{'/uploads/' + 'timapple.jpg'}"/>-->
+                    <img th:if="${!blog.images.isEmpty()}" th:src="@{'/uploads/' + ${blog.images.get(0).imageFileName}}" style="width:30%; margin:auto" class="card-img-top">
+                    <div class="card-body">
+                        <!--Blog Title-->
+                        <a href="#" class="card-link" style="color: #181a19;" th:href="@{/blogDetails(blogId=${blog.blogId})}">
+                            <h3 class="card-title" th:text="${blog.title}"></h3>
+                        </a>
+                        <!--Date Created-->
+                        <h6 class="card-subtitle mb-2 text-muted" 
+                            th:text="${#temporals.dayOfWeekName(blog.dateCreated)} + ', ' +
+                            ${#temporals.monthNameShort(blog.dateCreated)} + ' ' +
+                            ${#temporals.day(blog.dateCreated)} + ', ' +
+                            ${#temporals.year(blog.dateCreated)}"></h6>
+                        <!--Author Name-->
+                        <a href="#" th:href="@{/userDetails(userId=${blog.author.userId})}" th:text="${blog.author.firstName} + ' ' + ${blog.author.lastName}"></a>
+                        <!-- Tags -->
+                        <div style="display: flex; margin: 20px 0;">
+                            <span th:each="tag : ${blog.tags}" style="margin-right: 9px">
+                                <span th:replace="fragments/tagFragment :: 
+                                      tag(${tag.tagName},${tag.tagColor})"></span>                                      
+                            </span>
+                        </div>
+                        <!--...-->
+                        <div class="card-text" th:utext="${blog.description}"></div>                        
+
+                    </div>
+                    <ul class="list-group list-group-flush" sec:authorize="isAuthenticated()">
+                        <li class="list-group-item">
+                            <a href="#" class="card-link" th:href="@{/editBlog(blogId=${blog.blogId})}">Edit Blog</a>
+                            <a sec:authorize="hasRole('ADMIN')" href="#" class="card-link" th:href="@{/deleteBlog(blogId=${blog.blogId})}">Delete Blog</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>            
+        </div>
+        <!--End main body--> 
+
+        <!--Optional JavaScript--> 
+        <!--jQuery first, then Popper.js, then Bootstrap JS--> 
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    </body>
+</html>; 
